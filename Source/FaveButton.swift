@@ -67,7 +67,7 @@ open class FaveButton: UIButton {
         }
     }
     
-    init(frame: CGRect, faveIconNormal: UIImage?) {
+    public init(frame: CGRect, faveIconNormal: UIImage?) {
         super.init(frame: frame)
         
         guard let icon = faveIconNormal else{
@@ -92,7 +92,8 @@ open class FaveButton: UIButton {
 
 // MARK: create
 extension FaveButton{
-    fileprivate func applyInit(){
+
+    fileprivate func applyInit() {
         
         if nil == faveIconImage{
             faveIconImage = image(for: UIControlState())
@@ -113,7 +114,7 @@ extension FaveButton{
     }
     
     
-    fileprivate func createFaveIcon(_ faveIconImage: UIImage) -> FaveIcon{
+    fileprivate func createFaveIcon(_ faveIconImage: UIImage) -> FaveIcon {
         return FaveIcon.createFaveIcon(self, icon: faveIconImage,color: normalColor)
     }
     
@@ -140,8 +141,9 @@ extension FaveButton{
 
 // MARK: utils
 
-extension FaveButton{
-    fileprivate func dotColors(atIndex index: Int) -> DotColors{
+extension FaveButton {
+
+    fileprivate func dotColors(atIndex index: Int) -> DotColors {
         if case let delegate as FaveButtonDelegate = delegate , nil != delegate.faveButtonDotColors(self){
             let colors     = delegate.faveButtonDotColors(self)!
             let colorIndex = 0..<colors.count ~= index ? index : index % colors.count
@@ -154,17 +156,17 @@ extension FaveButton{
 
 
 // MARK: actions
-extension FaveButton{
-    func addActions(){
+extension FaveButton {
+
+    func addActions() {
         self.addTarget(self, action: #selector(toggle(_:)), for: .touchUpInside)
     }
     
-    func toggle(_ sender: FaveButton){
+    func toggle(_ sender: FaveButton) {
+
         sender.isSelected = !sender.isSelected
         
-        guard case let delegate as FaveButtonDelegate = self.delegate else{
-            return
-        }
+        guard case let delegate as FaveButtonDelegate = self.delegate else { return }
         
         let delay = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * Const.duration)) / Double(NSEC_PER_SEC)
         DispatchQueue.main.asyncAfter(deadline: delay){
@@ -176,13 +178,16 @@ extension FaveButton{
 
 // MARK: animation
 extension FaveButton{
-    fileprivate func animateSelect(_ isSelected: Bool, duration: Double){
+
+    fileprivate func animateSelect(_ isSelected: Bool, duration: Double) {
+
         let color  = isSelected ? selectedColor : normalColor
         
         faveIcon.animateSelect(isSelected, fillColor: color, duration: duration, delay: Const.faveIconShowDelay)
         
-        if isSelected{
-            let radius           = bounds.size.scaleBy(1.3).width/2 // ring radius
+        if isSelected {
+
+            let radius           = bounds.size.scaleBy(0.6).width/2 // ring radius
             let igniteFromRadius = radius*0.8
             let igniteToRadius   = radius*1.1
             
