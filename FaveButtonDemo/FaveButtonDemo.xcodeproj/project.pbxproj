@@ -237,10 +237,12 @@
 					26FEF3241D0E158100D75731 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = J4Z2NCTR3S;
+						LastSwiftMigration = 0800;
 					};
 					26FEF33E1D0E159B00D75731 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = J4Z2NCTR3S;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
