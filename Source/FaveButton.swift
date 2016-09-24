@@ -43,6 +43,8 @@ open class FaveButton: UIButton {
         static let faveIconShowDelay    = Const.expandDuration + Const.collapseDuration/2.0
         static let dotRadiusFactors     = (first: 0.0633, second: 0.04)
     }
+
+    open var shouldCreateRing = true
     
     @IBInspectable open var normalColor: UIColor     = UIColor(colorLiteralRed: 137/255, green: 156/255, blue: 167/255, alpha: 1)
     @IBInspectable open var selectedColor: UIColor   = UIColor(colorLiteralRed: 226/255, green: 38/255,  blue: 77/255,  alpha: 1)
@@ -184,13 +186,15 @@ extension FaveButton{
             let igniteFromRadius = radius*0.8
             let igniteToRadius   = radius*1.1
             
-            let ring   = Ring.createRing(self, radius: 0.01, lineWidth: 3, fillColor: self.circleFromColor)
-            let sparks = createSparks(igniteFromRadius)
-            
-            ring.animateToRadius(radius, toColor: circleToColor, duration: Const.expandDuration, delay: 0)
-            ring.animateColapse(radius, duration: Const.collapseDuration, delay: Const.expandDuration)
+            if shouldCreateRing {
+                let ring   = Ring.createRing(self, radius: 0.01, lineWidth: 3, fillColor: self.circleFromColor)
+                ring.animateToRadius(radius, toColor: circleToColor, duration: Const.expandDuration, delay: 0)
+                ring.animateColapse(radius, duration: Const.collapseDuration, delay: Const.expandDuration)
+            }
 
-            sparks.forEach{
+            let sparks = createSparks(igniteFromRadius)
+
+            sparks.forEach {
                 $0.animateIgniteShow(igniteToRadius, duration:0.4, delay: Const.collapseDuration/3.0)
                 $0.animateIgniteHide(0.7, delay: 0.2)
             }

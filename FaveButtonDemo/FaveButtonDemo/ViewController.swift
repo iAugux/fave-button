@@ -21,7 +21,12 @@ func color(_ rgbColor: Int) -> UIColor{
 
 class ViewController: UIViewController, FaveButtonDelegate{
     
-    @IBOutlet var heartButton: FaveButton?
+    @IBOutlet var heartButton: FaveButton? {
+        didSet {
+            heartButton?.shouldCreateRing = false
+        }
+    }
+    
     @IBOutlet var loveButton : FaveButton?
     
     let colors = [
