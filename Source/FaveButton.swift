@@ -39,7 +39,7 @@ open class FaveButton: UIButton {
         static let duration             = 1.0
         static let expandDuration       = 0.1298 
         static let collapseDuration     = 0.1089
-        static let faveIconShowDelay    = Const.expandDuration + Const.collapseDuration/2.0
+        static let faveIconShowDelay    = Const.expandDuration + Const.collapseDuration / 2.0
         static let dotRadiusFactors     = (first: 0.0633, second: 0.04)
     }
 
@@ -58,11 +58,15 @@ open class FaveButton: UIButton {
     
     fileprivate var faveIconImage: UIImage?
     fileprivate var faveIcon: FaveIcon!
-    
-    
+
+    open func setSelect(_ selected: Bool) {
+        isSelected = selected
+        animateSelect(selected, duration: Const.duration)
+    }
+
     override open var isSelected: Bool {
         didSet{
-            animateSelect(self.isSelected, duration: Const.duration)
+            faveIcon?.iconLayer.fillColor = isSelected ? selectedColor.cgColor : normalColor.cgColor
         }
     }
     
@@ -165,28 +169,27 @@ extension FaveButton {
 
 
 // MARK: actions
-extension FaveButton {
+
+fileprivate extension FaveButton {
 
     func addActions() {
         self.addTarget(self, action: #selector(toggle(_:)), for: .touchUpInside)
     }
     
-    func toggle(_ sender: FaveButton) {
+    @objc func toggle(_ sender: FaveButton) {
 
-        sender.isSelected = !sender.isSelected
+        sender.setSelect(!sender.isSelected)
         
         guard case let delegate as FaveButtonDelegate = self.delegate else { return }
         
-        let delay = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * Const.duration)) / Double(NSEC_PER_SEC)
-        DispatchQueue.main.asyncAfter(deadline: delay){
-            delegate.faveButton(sender, didSelected: sender.isSelected)
-        }
+        delegate.faveButton(sender, didSelected: sender.isSelected)
     }
 }
 
 
 // MARK: animation
-extension FaveButton{
+
+extension FaveButton {
 
     fileprivate func animateSelect(_ isSelected: Bool, duration: Double) {
 
@@ -197,8 +200,8 @@ extension FaveButton{
         if isSelected {
 
             let radius           = bounds.size.scaleBy(0.6).width / 2 // ring radius
-            let igniteFromRadius = radius*0.8
-            let igniteToRadius   = radius*1.1
+            let igniteFromRadius = radius * 0.8
+            let igniteToRadius   = radius * 1.1
             
             if shouldCreateRing {
                 let ring   = Ring.createRing(self, radius: 0.01, lineWidth: 3, fillColor: self.circleFromColor)
